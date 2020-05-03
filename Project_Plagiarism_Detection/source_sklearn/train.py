@@ -5,6 +5,7 @@ import os
 import pandas as pd
 
 from sklearn.externals import joblib
+from sklearn.ensemble import RandomForestClassifier
 
 ## TODO: Import any additional libraries you need to define a model
 
@@ -39,6 +40,12 @@ if __name__ == '__main__':
     parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
     
     ## TODO: Add any additional arguments that you will need to pass into your model
+    parser.add_argument('--n_estimators', type=int, default=100, 
+                        help='number of input features to model (default: 100)')
+    parser.add_argument('--min_samples_leaf', type=int, default=2, 
+                        help='min samples of a single leaf (default: 2)')
+    parser.add_argument('--n_jobs', type=int, default=-1, 
+                        help='Number of parallel jobs (default: -1)')
     
     # args holds all passed-in arguments
     args = parser.parse_args()
@@ -56,10 +63,10 @@ if __name__ == '__main__':
     
 
     ## TODO: Define a model 
-    model = None
-    
+    model = RandomForestClassifier(n_estimators=args.n_estimators, min_samples_leaf=args.min_samples_leaf, n_jobs=args.n_jobs)
     
     ## TODO: Train the model
+    model.fit(train_x, train_y)
     
     
     
